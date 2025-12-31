@@ -14,7 +14,7 @@ TENSOR_PARALLEL_SIZE = 4  # g4dn.12xlarge (GPU 4장)
     resources={"gpu": 4},
     traffic={"timeout": 300}
 )
-class Qwen3VLLMService:  # <--- [중요] bentofile.yaml에 적은 이름과 똑같아야 함!
+class Qwen3VLLMService:  
     def __init__(self):
         print(f"Loading model from: {MODEL_PATH}...")
         
@@ -51,12 +51,9 @@ class Qwen3VLLMService:  # <--- [중요] bentofile.yaml에 적은 이름과 똑�
         request_id = bentoml.utils.generate_request_id()
 
         # 프롬프트 구성 (채팅 템플릿 적용)
-        # Qwen3-VL은 이미지 처리가 복잡하므로 여기서는 텍스트 전용 예시입니다.
-        # 실제 이미지는 content 안에 리스트 형태로 들어옵니다.
         prompt = ""
         for msg in messages:
             content = msg.get("content", "")
-            # 간단한 텍스트 연결 (실제 서비스에선 tokenizer.apply_chat_template 권장)
             prompt += f"<|im_start|>{msg['role']}\n{content}<|im_end|>\n"
         prompt += "<|im_start|>assistant\n"
 
