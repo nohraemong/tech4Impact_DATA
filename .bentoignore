@@ -1,0 +1,12 @@
+# 모델 가중치 폴더 무시
+models/
+model_weights/
+Qwen3-VL-32B-Instruct-FP8/
+*.safetensors
+*.bin
+*.pt
+
+# 가상환경 및 기타 불필요 폴더
+.venv/
+__pycache__/
+.git/

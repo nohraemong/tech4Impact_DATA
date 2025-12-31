@@ -1,0 +1,52 @@
+service: "service:Qwen3VLLMService"
+labels:
+ owner: "nohjeong-lee"
+ stage: "production"
+ model: "qwen3-vl-32b-fp8-vllm"
+include:
+ - "service.py"
+ - "setup.sh"
+exclude:
+ - "__pycache__/"
+ - "*.pyc"
+ - ".git/"
+ - "*.log"
+ - ".DS_Store"
+ - "models/"
+python:
+ lock_packages: false
+ packages:
+  - "torch>=2.2.0"
+  - "torchvision>=0.17.0"
+  - "transformers>=4.40.0"
+  - "accelerate>=0.25.0"
+  - "vllm>=0.6.4"
+  - "bentoml>=1.2.0"
+  - "qwen-vl-utils>=0.0.3"
+  - "Pillow>=10.0.0"
+  - "numpy>=1.24.0"
+  - "fastapi>=0.104.0"
+  - "pydantic>=2.0.0"
+  - "openai>=1.0.0"
+docker:
+ base_image: "nvidia/cuda:12.1.0-cudnn8-runtime-ubuntu22.04"
+ setup_script: "setup.sh"
+ system_packages:
+  - "git"
+  - "curl"
+  - "wget"
+  - "build-essential"
+  - "libgl1-mesa-glx"
+  - "libglib2.0-0"
+  - "python3-pip"
+  - "python3-venv"
+ env:
+  CUDA_VISIBLE_DEVICES: "0,1,2,3"
+  VLLM_USE_MODELSCOPE: "False"
+  VLLM_WORKER_MULTIPROC_METHOD: "spawn"
+  PYTORCH_CUDA_ALLOC_CONF: "max_split_size_mb:1024"
+  NCCL_DISABLE_CHECK: "1"
+  NCCL_P2P_DISABLE: "1"
+  NCCL_IB_DISABLE: "1"
+  VLLM_USE_FP8_E4M3: 0
+  VLLM_FP8_E4M3_KV_CACHE: 0
